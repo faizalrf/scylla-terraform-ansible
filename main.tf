@@ -4,11 +4,11 @@ provider "google" {
 }
 
 provider "random" {
-  # No configuration needed for the random provider
+  // Nothing to do here
 }
 
 resource "google_compute_instance" "scylla-loader" {
-  count        = 3  # Number of instances to create
+  count        = 3
   name         = "faisal-scylla-loader-${format("%02d", count.index + 1)}"
   machine_type = "n2-highmem-2"
   zone         = var.zone
@@ -33,7 +33,6 @@ resource "google_compute_instance" "scylla-loader" {
 
   boot_disk {
       initialize_params {
-        //image = "ubuntu-os-cloud/ubuntu-2204-lts"
         image = "ubuntu-2204-lts"
       }
   }

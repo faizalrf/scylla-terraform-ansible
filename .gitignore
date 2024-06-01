@@ -2,6 +2,9 @@
 *.tfstate.backup
 *.tfstate.*
 *.out
+# Skip Scylla Ansible Role repository
+scylla-ansible-roles
+
 .terraform.lock.hcl
 # Local .terraform directories
 .terraform/*

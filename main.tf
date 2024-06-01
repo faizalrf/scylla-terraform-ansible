@@ -37,10 +37,6 @@ resource "google_compute_instance" "scylla-loader" {
       }
   }
 
-  scratch_disk {
-    interface = "NVME"
-  }
-
   network_interface {
     network = "default"
 

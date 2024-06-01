@@ -6,13 +6,13 @@ variable "project_id" {
 variable "region" {
   description = "The GCP region"
   type        = string
-  default     = "us-east1"
+  default     = "asia-southeast1"
 }
 
 variable "zone" {
   description = "The GCP zone"
   type        = string
-  default     = "us-east1-b"
+  default     = "asia-southeast1-a"
 }
 
 variable "ssh_public_key_path" {

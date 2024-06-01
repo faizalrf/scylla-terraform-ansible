@@ -1,5 +1,5 @@
 project_id = "skilled-adapter-452"
-region     = "us-east1"
-zone       = "us-east1-b"
+region     = "asia-southeast1"
+zone       = "asia-southeast1-a"
 ssh_public_key_path = "~/.ssh/id_ed25519.pub"
 ssh_private_public_key_path = "~/.ssh/id_ed25519"

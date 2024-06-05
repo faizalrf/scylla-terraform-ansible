@@ -21,7 +21,7 @@ resource "google_compute_instance" "scylla-loader" {
   
   provisioner "remote-exec" {
     inline = [
-      "sudo apt update",
+      "sudo apt update -y",
     ]
       connection {
       type        = "ssh"

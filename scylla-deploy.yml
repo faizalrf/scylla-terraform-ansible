@@ -38,3 +38,46 @@
 
   roles:
     - ansible-scylla-node
+
+
+- name: Scylla node
+  hosts: scylla
+  become: true
+  vars:
+    # variables for the Scylla node role (can be set here or in the role's vars/main.yml)
+    # comment out the following to use the defaults
+    
+    #scylla_repos:
+    #  - 'https://downloads.scylladb.com/deb/ubuntu/scylla-2024.1.list'
+    #scylla_repo_keyserver: 'hkp://keyserver.ubuntu.com:80'
+    #scylla_repo_keys:
+    #  - d0a112e067426ab2
+    
+    scylla_dependencies:
+      - curl
+      - wget
+    scylla_version: latest
+    scylla_edition: enterprise
+    scylla_cluster_name: 'testcluster'
+    scylla_snitch: GossipingPropertyFileSnitch
+    scylla_io_probe: True
+    enable_mc_format: true
+    scylla_seeds:
+      - "{{ hostvars[groups['scylla'][0]].private_ip }}"
+      - "{{ hostvars[groups['scylla'][1]].private_ip }}"
+    scylla_api_address: '127.0.0.1'
+    scylla_api_port: '10000'
+    scylla_broadcast_address: "{{ private_ip  }}"
+    scylla_rpc_address: "{{ private_ip  }}"
+    scylla_listen_address: "{{ private_ip  }}"
+    scylla_manager_enabled: true
+    scylla_manager_repo_url: 
+  tasks:
+    # Workaround for some Debian versions that might not have XFS support out of the box
+    - name: install XFSprogs
+      package:
+        name: xfsprogs
+        state: present
+      become: true
+  roles:
+    - ./ansible-scylla-role/ansible-scylla-node

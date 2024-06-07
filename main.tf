@@ -1,3 +1,13 @@
+terraform {
+  required_providers {
+    google = {
+      source = "hashicorp/google"
+      version = "5.32.0"
+    }
+  }
+    required_version = ">= 1.8.0"
+}
+
 provider "google" {
   project = var.project_id
   region  = var.region
@@ -10,7 +20,7 @@ provider "random" {
 resource "google_compute_instance" "scylla-loader" {
   count        = 3
   name         = "faisal-scylla-loader-${format("%02d", count.index + 1)}"
-  machine_type = "n2-highmem-2"
+  machine_type = "n2-highmem-4"
   zone         = var.zone
   min_cpu_platform = "Intel Ice Lake"
   tags = ["keep", "alive", "ssh"]
@@ -20,6 +30,7 @@ resource "google_compute_instance" "scylla-loader" {
   }
   
   provisioner "remote-exec" {
+    #Create the NVMe filesystem and mount /var/lib to it for ScyllaDB to use
     inline = [
       "sudo apt update -y",
     ]
@@ -32,9 +43,10 @@ resource "google_compute_instance" "scylla-loader" {
   }
 
   boot_disk {
-      initialize_params {
-        image = "ubuntu-2204-lts"
-      }
+    initialize_params {
+      image = "ubuntu-2204-lts"
+      size = 256
+    }
   }
 
   network_interface {

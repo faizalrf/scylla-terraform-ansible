@@ -1,0 +1,6 @@
+- name: Verify Ansible connection
+  hosts: scylla
+  tasks:
+    - name: Ping the remote host
+      ping:
+

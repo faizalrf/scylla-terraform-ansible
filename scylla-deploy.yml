@@ -1,58 +1,18 @@
-- name: Deploy ScyllaDB Cluster
+- name: Deploy Enterprise ScyllaDB Cluster
   hosts: scylla
   become: true
+
   vars:
-    # ScyllaDB repository URL
-    scylla_repos:
-      - 'https://repositories.scylladb.com/scylla/repo/****/centos/scylladb-4.1.repo'
-
-    # ScyllaDB dependencies
-    scylla_dependencies:
-      - curl
-      - wget
-
-    # ScyllaDB version and edition
-    scylla_version: latest
-    scylla_edition: oss
-
-    # Cluster configuration
-    scylla_cluster_name: 'democluster'
-    scylla_snitch: GossipingPropertyFileSnitch
-    scylla_io_probe: True
-    enable_mc_format: true
-
-    # Seed nodes for the cluster
-    scylla_seeds:
-      - "{{ groups['scylla'][3] }}"
-      - "{{ groups['scylla'][4] }}"
-      - "{{ groups['scylla'][5] }}"
-
-    # API configuration
-    scylla_api_address: '127.0.0.1'
-    scylla_api_port: '10000'
-
-    # Monitoring and manager configuration
-    generate_monitoring_config: True
-    scylla_manager_enabled: true
-    scylla_manager_repo_url: "https://downloads.scylladb.com/rpm/centos/scylladb-manager-2.1.repo"
-
-  roles:
-    - ansible-scylla-node
-
-
-- name: Scylla node
-  hosts: scylla
-  become: true
-  vars:
-    # variables for the Scylla node role (can be set here or in the role's vars/main.yml)
-    # comment out the following to use the defaults
-    
-    #scylla_repos:
-    #  - 'https://downloads.scylladb.com/deb/ubuntu/scylla-2024.1.list'
-    #scylla_repo_keyserver: 'hkp://keyserver.ubuntu.com:80'
-    #scylla_repo_keys:
-    #  - d0a112e067426ab2
-    
+    #mdadm_arrays:
+    #- name: 'md0'
+    #  devices:
+    #    - '/dev/nvme0n1'
+    #    - '/dev/nvme1n1'
+    #  filesystem: 'xfs'
+    #  level: '0'
+    #  mountpoint: '/var/lib/scylla'
+    #  state: 'present'
+    #  opts: 'noatime,nofail'
     scylla_dependencies:
       - curl
       - wget
@@ -63,14 +23,15 @@
     scylla_io_probe: True
     enable_mc_format: true
     scylla_seeds:
-      - "{{ hostvars[groups['scylla'][0]].private_ip }}"
-      - "{{ hostvars[groups['scylla'][1]].private_ip }}"
+      - "{{ groups['scylla'][0] }}"
+      - "{{ groups['scylla'][1] }}"
     scylla_api_address: '127.0.0.1'
     scylla_api_port: '10000'
-    scylla_broadcast_address: "{{ private_ip  }}"
-    scylla_rpc_address: "{{ private_ip  }}"
-    scylla_listen_address: "{{ private_ip  }}"
+    scylla_broadcast_address: '{{ hostvars[inventory_hostname][''ansible_''~scylla_nic].ipv4.address }}'
+    scylla_rpc_address: '{{ hostvars[inventory_hostname][''ansible_''~scylla_nic].ipv4.address }}'
+    scylla_listen_address: '{{ hostvars[inventory_hostname][''ansible_''~scylla_nic].ipv4.address }}'
     scylla_manager_enabled: true
+    generate_monitoring_config: false
     scylla_manager_repo_url: 
   tasks:
     # Workaround for some Debian versions that might not have XFS support out of the box
@@ -80,4 +41,4 @@
         state: present
       become: true
   roles:
-    - ./ansible-scylla-role/ansible-scylla-node
+    - scylla-ansible-roles/ansible-scylla-node

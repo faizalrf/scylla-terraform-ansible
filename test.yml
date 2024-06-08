@@ -1,0 +1,51 @@
+- name: Deploy Enterprise ScyllaDB Cluster
+  hosts: scylla
+  become: true
+
+  vars:
+    scylla_raid_setup:
+      - /dev/nvme0n1
+    scylla_dependencies:
+      - curl
+      - wget
+    scylla_version: latest
+    scylla_edition: enterprise
+    scylla_cluster_name: 'testcluster'
+    scylla_snitch: GossipingPropertyFileSnitch
+    scylla_io_probe: True
+    io_conf: SEASTAR_IO="--io-properties-file=/etc/scylla.d/io_properties.yaml"
+    enable_mc_format: false
+    scylla_seeds:
+      - "{{ groups['scylla'][0] }}"
+      - "{{ groups['scylla'][1] }}"
+    scylla_api_address: '127.0.0.1'
+    scylla_api_port: '10000'
+    scylla_broadcast_address: '{{ hostvars[inventory_hostname][''ansible_''~scylla_nic].ipv4.address }}'
+    scylla_rpc_address: '{{ hostvars[inventory_hostname][''ansible_''~scylla_nic].ipv4.address }}'
+    scylla_listen_address: '{{ hostvars[inventory_hostname][''ansible_''~scylla_nic].ipv4.address }}'
+    scylla_manager_enabled: true
+    generate_monitoring_config: false
+    scylla_manager_repo_url:
+    skip_installed_scylla_version_check: 'false'
+    start_scylla_service: 'true'
+    swap_file_size_mb: '1024'
+    scylla_yaml_params:
+      compaction_enforce_min_threshold: true
+      compaction_static_shares: 100
+      components_memory_reclaim_threshold: 1.0
+      consistent_cluster_management: true
+      force_schema_commit_log: true
+      hinted_handoff_enabled: false
+      internode_compression: all
+      max_clustering_key_restrictions_per_query: 1000
+      max_memory_for_unlimited_query: 104857600
+      max_partition_key_restrictions_per_query: 1000
+  tasks:
+    # Workaround for some Debian versions that might not have XFS support out of the box
+    - name: install XFSprogs
+      package:
+        name: xfsprogs
+        state: present
+      become: true
+  roles:
+    - scylla-ansible-roles/ansible-scylla-node

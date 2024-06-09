@@ -1,4 +1,6 @@
 #!/bin/bash
+# This script reads the terraform output variables and generates an inventor file for Ansible
+# Faisal Saeed @ ScyllaDB
 
 # Get Terraform output in JSON format
 terraform_output=$(terraform output -json)

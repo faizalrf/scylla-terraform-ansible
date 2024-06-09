@@ -1,3 +1,6 @@
+# This Terraform script deploys 3 nodes on GCP and opens up firewalls for ScyllaDB
+# Faisal Saeed @ ScyllaDB
+
 terraform {
   required_providers {
     google = {

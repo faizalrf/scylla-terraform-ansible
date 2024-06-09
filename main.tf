@@ -29,19 +29,6 @@ resource "google_compute_instance" "scylla-node" {
     ssh-keys = "ubuntu:${file(var.ssh_public_key_path)}"
   }
   
-  #provisioner "remote-exec" {
-  #  #Create the NVMe filesystem and mount /var/lib to it for ScyllaDB to use
-  #  inline = [
-  #    "sudo apt update -y",
-  #  ]
-  #    connection {
-  #    type        = "ssh"
-  #    user        = "ubuntu"
-  #    private_key = file(var.ssh_private_public_key_path)
-  #    host        = self.network_interface.0.access_config.0.nat_ip
-  #  }
-  #}
-
   boot_disk {
     initialize_params {
       image = "ubuntu-2204-lts"

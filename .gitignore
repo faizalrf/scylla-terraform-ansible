@@ -17,7 +17,7 @@ scylla-ansible-roles
 
 #  Ignore environment-specific files
 .envrc
-
+.env
 #  Ignore CLI configuration files
 .terraformrc
 scylla-inventory.ini

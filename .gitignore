@@ -20,4 +20,5 @@ scylla-ansible-roles
 
 #  Ignore CLI configuration files
 .terraformrc
+scylla-inventory.ini
 terraform.rc.terraform/

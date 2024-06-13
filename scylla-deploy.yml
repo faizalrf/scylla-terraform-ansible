@@ -15,14 +15,15 @@
     full_inventory: true
     install_only: false
     install_type: online
-    io_conf: SEASTAR_IO="--io-properties-file=/etc/scylla.d/io_properties.yaml"
-    scylla_bootstrap_wait_time_sec: '25200'
-    scylla_broadcast_address: '{{ hostvars[inventory_hostname][''ansible_''~scylla_nic].ipv4.address }}'
-    scylla_io_probe: true 
-    scylla_listen_address: '{{ hostvars[inventory_hostname][''ansible_''~scylla_nic].ipv4.address }}'
-    scylla_manager_agent_upgrade: false
-    scylla_nic: '{{ ansible_default_ipv4.interface }}'
-    scylla_rpc_address: '{{ hostvars[inventory_hostname][''ansible_''~scylla_nic].ipv4.address }}'
+    scylla_authentication: false
+    #scylla_manager_agent_upgrade: false
+    #io_conf: SEASTAR_IO="--io-properties-file=/etc/scylla.d/io_properties.yaml"
+    #scylla_bootstrap_wait_time_sec: '25200'
+    #scylla_broadcast_address: '{{ hostvars[inventory_hostname][''ansible_''~scylla_nic].ipv4.address }}'
+    #scylla_io_probe: true 
+    #scylla_listen_address: '{{ hostvars[inventory_hostname][''ansible_''~scylla_nic].ipv4.address }}'
+    #scylla_nic: '{{ ansible_default_ipv4.interface }}'
+    #scylla_rpc_address: '{{ hostvars[inventory_hostname][''ansible_''~scylla_nic].ipv4.address }}'
     #scylla_ssl:
     #    cert_path: /etc/scylla/
     #    client:
@@ -42,5 +43,6 @@
     scylla_api_port: '10000'
     scylla_manager_enabled: false
     generate_monitoring_config: true
+  # Path to the Scylla Ansible Role directory
   roles:
     - scylla-ansible-roles/ansible-scylla-node

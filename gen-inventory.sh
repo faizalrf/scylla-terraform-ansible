@@ -17,6 +17,7 @@ public_ips_array=($public_ips)
 inventory_file=scylla-inventory.ini
 
 counter=0
+# 97 is the ascii for lower case `a`, this will be the first zone
 rack_suffix=97
 ascii_char=$(printf "\\$(printf '%03o' "$rack_suffix")")
 

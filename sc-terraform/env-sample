@@ -1,2 +1,0 @@
-# Create a .env file with the following variable and use the Scylla CLoud token appropriately
-export TF_VAR_scylla_api_token=<Scylla Cloud Token>

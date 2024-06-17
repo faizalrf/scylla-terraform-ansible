@@ -19,9 +19,9 @@
     scylla_ssl:
         cert_path: /etc/scylla/
         client:
-            enabled: true
+            enabled: false
         internode:
-            enabled: true
+            enabled: false
             internode_encryption: all
     scylla_yaml_params:
         force_schema_commit_log: true

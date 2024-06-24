@@ -36,6 +36,8 @@ shell> gcloud auth application-default login
 shell> gcloud config set project <project-name>
 ```
 
+_**Note:** In this case we can use the project-id 'skilled-adapter-452'_
+
 After successful authentication, you will be able to execute GCP CLI commands `gcloud` and list/create/modify the objects created under your account. 
 
 Test your access through the following, this should list all the compute instancs available in your project.

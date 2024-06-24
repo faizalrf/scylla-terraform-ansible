@@ -17,6 +17,11 @@ provider "google" {
   region  = var.region
 }
 
+# To get "My Public IP"
+data "http" "my_ip" {
+  url = "https://api.ipify.org"
+}
+
 # Random number provider 
 provider "random" {
   // Nothing to do here
@@ -80,7 +85,9 @@ resource "google_compute_firewall" "allow_cql" {
     ports    = ["9042"]
   }
 
-  source_ranges = ["0.0.0.0/0"]
+  # Allow my Public IP only
+  source_ranges = [data.http.my_ip.response_body]
+  #source_ranges = ["0.0.0.0/0"]
   target_tags   = ["scylla"]
 }
 

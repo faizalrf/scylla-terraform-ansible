@@ -65,7 +65,7 @@ ssh_public_key_path = "~/.ssh/id_ed25519.pub"
 ssh_private_public_key_path = "~/.ssh/id_ed25519"
 ```
 
-The configurations are self explanatory, however, the `name_suffix` is something to add as a prefix for the ScyllaDB nodes so that they don't get mixed up with others. The `ssh` key variables point to **your** private and public keys on your computer. Pay close attention to configuring those, without these, you and **ansible** won't be able to `ssh` into the nodes later on.
+The configurations are self explanatory, however, the `name_prefix` is something to add as a prefix for the ScyllaDB nodes so that they don't get mixed up with others. The `ssh` key variables point to **your** private and public keys on your computer. Pay close attention to configuring those, without these, you and **ansible** won't be able to `ssh` into the nodes later on.
 
 To execute the terraform script
 

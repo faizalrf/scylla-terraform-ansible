@@ -23,6 +23,11 @@ scylla-terraform-ansible/
 ├── scylladb-ansible-role/
 |    ├── README.md
 |    └── LICENSE
+├── main.tf
+├── scylla-deploy.yml
+├── go.sh
+├── ansible-play.sh
+├── gen-inventory.sh
 ├── README.md
 └── LICENSE
 ```

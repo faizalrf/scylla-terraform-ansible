@@ -1,6 +1,5 @@
 project_id = "skilled-adapter-452"
 region     = "asia-southeast1"
-zone       = "asia-southeast1-a"
 node_count = 3
 hardware_type = "n2-highmem-2"
 name_prefix = "ansible-role-test"

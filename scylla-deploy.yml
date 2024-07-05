@@ -1,6 +1,5 @@
 - name: Deploy Enterprise ScyllaDB Cluster
   hosts: scylla
-  become: true
   vars:
     scylla_raid_setup:
       - /dev/nvme0n1

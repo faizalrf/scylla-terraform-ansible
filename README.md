@@ -66,12 +66,11 @@ node_count = 3
 hardware_type = "n2-highmem-2"
 name_prefix = "faisal-"
 ssh_public_key_path = "~/.ssh/id_ed25519.pub"
-ssh_private_public_key_path = "~/.ssh/id_ed25519"
 ```
 
 _**Note:** The `zone` will be automatically decided by terraform for each node based on the available zones in the given region_
 
-The configurations are self-explanatory. However, the `name_prefix` is something to add as a prefix for the ScyllaDB nodes so they don't get mixed up with others. The `ssh` key variables point to **your** private and public keys on your computer. Pay close attention to configuring those, without these, you and **Ansible** won't be able to `ssh` into the nodes later on.
+The configurations are self-explanatory. However, the `name_prefix` is something to add as a prefix for the ScyllaDB nodes so they don't get mixed up with others. The `ssh_public_key_path` variable refers to **your** SSH public key on your computer. Pay close attention to this value, because without it, you and **Ansible** won't be able to `ssh` into the nodes later on.
 
 To execute the terraform script
 

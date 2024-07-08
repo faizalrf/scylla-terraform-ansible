@@ -83,7 +83,7 @@ shell> terraform apply
 
 The **`init`** is only required for the first time and not needed again unless we make changes to the `main.tf` script that requires re-initializing. The **`plan`** will generate a detailed report plan of the items that Terraform will provision. The **`apply`** will go ahead and apply the said plan on GCP and provision all the resources mentioned in the `main.tf` script based on the configuration defined in the variables. The `apply` phase will ask you to confirm before proceeding with the plan; type **`yes`** and press enter to execute.
 
-Once the provisioning has been done, It will output the public and private IP addresses of all the nodes created. We can now use the public IP to connect to the nodes using `ssh ubuntu@<public-ip>` and do what we want. However, we want ScyllaDB Ansible Role to do all the work for us. For that, there is just one requirement: generate an **invenventory** file that contains the list of nodes and their IP addresses 
+Once the provisioning has been done, It will output the public and private IP addresses of all the nodes created. We can now use the public IP to connect to the nodes using `ssh ubuntu@<public-ip>` and do what we want. However, we want ScyllaDB Ansible Role to do all the work for us. For that, there is just one requirement: generate an **inventory** file that contains the list of nodes and their IP addresses 
 
 The inventory file format must follow this structure
 

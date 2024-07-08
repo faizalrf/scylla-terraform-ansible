@@ -2,7 +2,7 @@
 
 This document aims to set up this tool to quickly deploy the ScyllaDB Enterprise cluster. It uses the [ScyllaDB Ansible Role](https://github.com/scylladb/scylla-ansible-roles) to automate the deployment and configuration of ScyllaDB, following best practices and tuning, so that the user doesn't have to worry about those.
 
-## Preperation
+## Preparation
 
 We need the following pre-installed to use these Ansible and Terraform scripts: The details are based on Linux (Ubuntu); if using Windows, WSL2 with Ubuntu is recommended.
 

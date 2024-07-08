@@ -8,7 +8,7 @@ terraform {
       version = "5.32.0"
     }
   }
-  required_version = ">= 1.8.0"
+  required_version = ">= 1.5.7"
 }
 
 # Google Project and Region from the default variables

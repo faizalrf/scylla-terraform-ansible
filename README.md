@@ -10,7 +10,7 @@ We need the following pre-installed to use these Ansible and Terraform scripts: 
     - Send an email to your IT admin team to get access to a GCP project
 - Install the latest stable [Python](https://www.python.org/downloads/)
 - Install [Terraform](https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli)
-    - Version 1.8.0 or higher
+    - Version 1.5.7 or higher
 - Install [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#installing-and-upgrading-ansible-with-pipx)
     - Version 6.7.0 or higher
 - You should already have Git if you are here :)

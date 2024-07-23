@@ -1,0 +1,87 @@
+---
+- name: Install and configure ScyllaDB on a 3-node cluster
+  hosts: scylla
+  become: yes
+  gather_facts: yes  # Ensure fact gathering is enabled
+  vars:
+    scylla_version: "6.0"
+    device_path: "/dev/nvme0n1"  # Device path for IO setup
+  tasks:
+    - name: Install dependencies
+      apt:
+        name:
+          - curl
+          - wget
+        state: present
+        update_cache: yes
+
+    - name: Install ScyllaDB
+      shell: curl -sSf get.scylladb.com/server | sudo bash -s -- --scylla-version {{ scylla_version }}
+
+    - name: Determine first node
+      set_fact:
+        first_node: "{{ groups['scylla'][0] }}"
+
+    - name: Run scylla_setup on all nodes
+      shell: sudo scylla_setup --disks {{ device_path }} --online-discard 1 --nic {{ ansible_default_ipv4.interface }} --io-setup 1 --no-fstrim-setup
+      args:
+        warn: false
+
+    - name: Stop ScyllaDB server if running
+      service:
+        name: scylla-server
+        state: stopped
+        enabled: yes
+
+    - name: Update listen_address in scylla.yaml
+      lineinfile:
+        path: /etc/scylla/scylla.yaml
+        regexp: '^listen_address:.*'
+        line: "listen_address: {{ inventory_hostname }}"
+
+    - name: Update rpc_address in scylla.yaml
+      lineinfile:
+        path: /etc/scylla/scylla.yaml
+        regexp: '^rpc_address:.*'
+        line: "rpc_address: {{ inventory_hostname }}"
+
+    - name: Update broadcast_address in scylla.yaml
+      lineinfile:
+        path: /etc/scylla/scylla.yaml
+        regexp: '^broadcast_address:.*'
+        line: "broadcast_address: {{ inventory_hostname }}"
+
+    - name: Update broadcast_rpc_address in scylla.yaml
+      lineinfile:
+        path: /etc/scylla/scylla.yaml
+        regexp: '^broadcast_rpc_address:.*'
+        line: "broadcast_rpc_address: {{ inventory_hostname }}"
+
+    - name: Update seeds in scylla.yaml
+      lineinfile:
+        path: /etc/scylla/scylla.yaml
+        regexp: '^seeds:.*'
+        line: "seeds: {{ first_node }}"
+
+    - name: Start the first ScyllaDB node
+      service:
+        name: scylla-server
+        state: started
+      when: inventory_hostname == first_node
+
+    - name: Wait for ScyllaDB to be ready on the first node
+      wait_for:
+        host: "{{ inventory_hostname }}"
+        port: 9042
+        state: started
+        timeout: 300
+      when: inventory_hostname == first_node
+
+    - name: Start ScyllaDB on non-first nodes
+      service:
+        name: scylla-server
+        state: started
+      when: inventory_hostname != first_node
+      run_once: true
+      delegate_to: "{{ item }}"
+      with_items: "{{ groups['scylla'] | difference([first_node]) }}"

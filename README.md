@@ -26,6 +26,7 @@ scylla-terraform-ansible/
 |    └── LICENSE
 ├── main.tf
 ├── scylla-deploy.yml
+├── monitor-deploy.yml
 ├── go.sh
 ├── ansible-play.sh
 ├── gen-inventory.sh
@@ -92,6 +93,7 @@ The inventory file format must follow this structure
 <Private-IP> ansible_host=<Public-IP> dc=<Cloud-Region> rack=<Region AZ>
 <Private-IP> ansible_host=<Public-IP> dc=<Cloud-Region> rack=<Region AZ>
 <Private-IP> ansible_host=<Public-IP> dc=<Cloud-Region> rack=<Region AZ>
+<Private-IP> ansible_host=<Public-IP> dc=<Cloud-Region> rack=<Region AZ>
 ```
 
 To make this easier, I have also provided a script that reads values from the `terraform apply` output and generates the inventory file for us.
@@ -101,6 +103,18 @@ shell> ./gen-inventory.sh
 ```
 
 As a shortcut, you can also execute `./go.sh` to do all of the above and also generate the inventory file.
+
+If you plan to reserve one node for Scylla Monitor, edit the auto generated inventory file and separate out one of the node under `[monitor]` section
+
+```
+[scylla]
+<Private-IP> ansible_host=<Public-IP> dc=<Cloud-Region> rack=<Region AZ>
+<Private-IP> ansible_host=<Public-IP> dc=<Cloud-Region> rack=<Region AZ>
+<Private-IP> ansible_host=<Public-IP> dc=<Cloud-Region> rack=<Region AZ>
+
+[monitor]
+<Private-IP> ansible_host=<Public-IP> dc=<Cloud-Region> rack=<Region AZ>
+```
 
 ## Set up ScyllaDB Cluster
 
@@ -133,12 +147,18 @@ Starting from line #4, `vars:` all the configurations are related to ScyllaDB an
  scylla_edition: enterprise
 ```
 
-The folder that contains the `scylla-deployment.yml` file also contains the folder for Scylla Ansible Roles; within that subfolder, there are multiple roles; the one we are using is the `Scylla-ansible-roles/ansible-Scylla-node.` Navigate to the `ansible-scylla-node/defaults/main.yml`, which contains all the configuration variables for ScyllaDB and is designed with decent values. These can be configured and overridden as needed; for instance, in this example, `scylla-deploy.yml`, we have turned off the `SSL` configuration, but if we look inside the `defaults/main.yml`, we can see it's enabled by default. The role will automatically create SSL certs, including CA cert, and configure encryption of data in transit from end to end. 
+The folder that contains the `scylla-deploy.yml` & `monitor-deploy.yml` files, also contains the folder for Scylla Ansible Roles; within that subfolder, there are multiple roles; the one we are using is the `Scylla-ansible-roles/ansible-Scylla-node.` Navigate to the `ansible-scylla-node/defaults/main.yml`, which contains all the configuration variables for ScyllaDB and is designed with decent values. These can be configured and overridden as needed; for instance, in this example, `scylla-deploy.yml`, we have turned off the `SSL` configuration, but if we look inside the `defaults/main.yml`, we can see it's enabled by default. The role will automatically create SSL certs, including CA cert, and configure encryption of data in transit from end to end. 
 
 The role also uses some custom code that is not available with the default Ansible. For this, we need to execute the ansible-playbook with additional parameters to point to the custom library. 
 
 `./ansible-play.sh` is provided to take care of that. 
 
 Execute the above script to deploy a cluster based on the Terraform provisioned hardware and Scylla configuration defined and overwritten by the Scylla Ansible Role.
+
+To deploy the monitor for the hosts under the `[monitor]` section in the inventory file, simply execiute 
+
+```
+ansible-playbook monitor-deploy.yml
+```
 
 After the execution is completed without errors, execute `ssh ubuntu@<public-ip>` to one of your nodes and verify the Scylla cluster is up and running using `nodetool status` commands and also connect to it using `cqlsh <private-ip>` and test some CQL commands.

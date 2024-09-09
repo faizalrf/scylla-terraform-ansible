@@ -3,5 +3,11 @@
 <Private-IP> ansible_host=<Public-IP> dc=<Cloud-Region> rack=<Region AZ>
 <Private-IP> ansible_host=<Public-IP> dc=<Cloud-Region> rack=<Region AZ>
 
+[monitor]
+<Private-IP> ansible_host=<Public-IP> dc=<Cloud-Region> rack=<Region AZ>
+
+[manager]
+<Private-IP> ansible_host=<Public-IP> dc=<Cloud-Region> rack=<Region AZ>
+
 # ansible_host can be skipped if the deployment is being executed from within the VPC
 # ansible_host is needed as public ip if the deployment is being run from outside of the VPC

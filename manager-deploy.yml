@@ -1,0 +1,27 @@
+- hosts: manager
+  vars:
+    scylla_clusters:
+      - cluster_name: "testcluster"
+        host: "{{ groups['scylla'][0]}}"
+        auth_token_file: scyllamgr_auth_token.txt
+        without_repair: false
+    #scylla_manager_repo_url: "https://downloads.scylladb.com/deb/ubuntu/scylladb-manager-3.2.list"
+    scylla_manager_deb_repo_url: "https://downloads.scylladb.com/deb/ubuntu/scylladb-manager-3.2.list"
+    scylla_manager_repo_keys:
+      - A43E06657BAC99E3
+      - d0a112e067426ab2
+      - 5e08fbd8b5d6ec9c
+    #  These will be passed on to the ansible-scylla-node role applied to the Manager node in order to deploy a local Scylla instance
+    scylla_manager_db_vars:
+      scylla_repo_keyserver: hkp://keyserver.ubuntu.com:80
+      scylla_repo_keys:
+        - A43E06657BAC99E3
+        - d0a112e067426ab2
+        - 5e08fbd8b5d6ec9c
+      scylla_version: latest
+      scylla_edition: enterprise
+      scylla_dependencies:
+        - curl
+        - wget
+  roles:
+    - scylla-ansible-roles/ansible-scylla-manager
